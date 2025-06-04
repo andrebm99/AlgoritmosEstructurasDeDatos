@@ -5,18 +5,10 @@ public class Main {
         ListaEnlazadaAsistente asistente = new ListaEnlazadaAsistente();
 
         asistente.insertarInicio("Revision mensual");
+        asistente.insertarAntesDe("Revision mensual", "Reunión de equipo");
+        asistente.insertarDespuseDe("Revision mensual", "Llamada con cliente");
 
         asistente.mostrar();
-
-        asistente.insertarAntesDe("Revision Mensual", "Llamada con cliente");
-
-        asistente.mostrar();
-
-
-        asistente.insertarAntesDe("Revision Mensual", "Reunion de equipo de desarrollo");
-
-
-
 
     }
 }

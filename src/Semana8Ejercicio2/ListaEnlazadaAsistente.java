@@ -1,123 +1,115 @@
 package Semana8Ejercicio2;
 
 public class ListaEnlazadaAsistente {
-    private Asistente antes, despues;
+    private Asistente inicio, fin;
 
     public ListaEnlazadaAsistente(){
-        this.antes = null;
-        this.despues = null;
+        this.inicio = null;
+        this.fin = null;
     }
 
-    public Asistente getAntes() {
-        return antes;
+    public Asistente getInicio() {
+        return inicio;
     }
 
-    public void setAntes(Asistente antes) {
-        this.antes = antes;
+    public void setInicio(Asistente inicio) {
+        this.inicio = inicio;
     }
 
-    public Asistente getDespues() {
-        return despues;
+    public Asistente getFin() {
+        return fin;
     }
 
-    public void setDespues(Asistente despues) {
-        this.despues = despues;
+    public void setFin(Asistente fin) {
+        this.fin = fin;
     }
 
     // Insertar inicio
 
     public void insertarInicio(String reunion){
-        Asistente nuevo = new Asistente(reunion, antes);
-
-        antes = nuevo;
-
-    }
-
-    // Insertar al final
-
-    public void insertarFinal(String reunion){
-
-        Asistente nuevo = new Asistente(reunion);
-
-        if(antes == null){
-            antes = nuevo;
-            return;
-        }
-        Asistente actual = antes;
-        while(actual.getSiguente() != null){
-            actual = actual.getSiguente();
-        }
-
-        actual.setSiguente(nuevo);
+        Asistente nuevoAsistente = new Asistente(reunion);
+         if(inicio == null){
+             inicio = fin = nuevoAsistente;
+         } else{
+             nuevoAsistente.setSiguente(inicio);
+             inicio.setAnterior(nuevoAsistente);
+             inicio = nuevoAsistente;
+         }
     }
 
     public void insertarAntesDe(String valorBuscado, String nuevaReunion){
-        if(antes == null){
-            System.out.println("Lista vacia, no se puede insertar despues de '" + valorBuscado + " '.");
+        if(inicio == null){
+            System.out.println("Lista vacia, no se puede insertar");
             return;
         }
 
-        if(antes.getReunion().equals(valorBuscado)){
-            Asistente nuevo = new Asistente(nuevaReunion, antes);
-            antes = nuevo;
-            return;
-        }
-
-        Asistente prev = antes;
-        Asistente actual = antes.getSiguente();
-
-        while(actual != null && !actual.getReunion().equals(valorBuscado)){
-            prev = actual;
-            actual = actual.getSiguente();
-        }
-        if(actual == null){
-            System.out.println("No se encontró la reunion: '" + valorBuscado + "' ");
-            return;
-        }
-
-        Asistente nuevoNodo = new Asistente(nuevaReunion);
-        prev.setSiguente(nuevoNodo);
-        actual.setSiguente(actual);
-
-    }
-
-
-    public void insertarDespuesDe(String valorBuscado, String nuevaReunion){
-        if(antes == null){
-            System.out.println("Lista vacia, no se puede insertar despues de '" + valorBuscado + " '.");
-            return;
-        }
-
-        Asistente actual = antes;
+        Asistente actual = inicio;
 
         while(actual != null && !actual.getReunion().equals(valorBuscado)){
             actual = actual.getSiguente();
         }
-        if(actual == null){
-            System.out.println("No se encontró la reunion: '" + valorBuscado + "' ");
+
+        if (actual == null){
+            System.out.println("No se encontró la reuncion con dato: " + valorBuscado);
             return;
         }
 
-        Asistente nuevoNodo = new Asistente(nuevaReunion);
-        nuevoNodo.setSiguente(actual.getSiguente());
-        actual.setSiguente(nuevoNodo);
-
+        Asistente nuevoAsistente = new Asistente(nuevaReunion);
+        if(actual == inicio){
+            nuevoAsistente.setSiguente(inicio);
+            inicio.setAnterior(nuevoAsistente);
+            inicio = nuevoAsistente;
+        } else{
+            Asistente anterior = actual.getAnterior();
+            anterior.setSiguente(nuevoAsistente);
+            nuevoAsistente.setAnterior(anterior);
+            nuevoAsistente.setSiguente(actual);
+            actual.setAnterior(nuevoAsistente);
+        }
     }
 
+    // Insertar despues de
 
+    public void insertarDespuseDe(String valorBuscado, String nuevaReunion){
+        if(inicio == null){
+            System.out.println("Lista vacia, no se puede insertar");
+            return;
+        }
+
+        Asistente actual = inicio;
+
+        while(actual != null && !actual.getReunion().equals(valorBuscado)){
+            actual = actual.getSiguente();
+        }
+
+        if (actual == null){
+            System.out.println("No se encontró la reuncion con dato: " + valorBuscado);
+            return;
+        }
+
+        Asistente nuevoAsistente = new Asistente(nuevaReunion);
+
+        if(actual.getSiguente() == null){
+            actual.setSiguente(nuevoAsistente);
+            nuevoAsistente.setAnterior(actual);
+        } else{
+            Asistente siguienteOriginal = actual.getSiguente();
+
+            actual.setSiguente(nuevoAsistente);
+            nuevoAsistente.setAnterior(actual);
+            nuevoAsistente.setSiguente(siguienteOriginal    );
+            siguienteOriginal.setAnterior(nuevoAsistente);
+        }
+    }
 
 
     // Mostrar
 
     public void mostrar(){
-        if(antes == null){
-            System.out.println("La lsita está vacia.");
-            return;
-        }
-        Asistente actual = antes;
-        while(actual != null){
-            System.out.println(actual.getReunion());
-            actual = actual.getSiguente();
+        Asistente elemento = inicio;
+        while(elemento != null){
+            System.out.println("> " + elemento.getReunion());
+            elemento = elemento.getSiguente();
         }
     }
 
